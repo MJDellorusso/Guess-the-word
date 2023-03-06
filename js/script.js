@@ -19,22 +19,26 @@ const placeholder = function (word) {
   wordInProgress.innerText = placeholderLetters.join("");
 };
 placeholder(word);
-//
+
+//Event listener for when a letter is submitted.
 guessLetterButton.addEventListener("click", function (e) {
   e.preventDefault();
   // Empty the message paragraph
   message.innerText = "";
   // Grab what was entered in the input
   const guess = letterInput.value;
-  // Check guess for single letter
+  // Check guess for single letter then holds that letter as its value. ex const goodGuess = A.
   const goodGuess = inputValidator(guess);
-
+  // if the inputValidator determines the guess is good, run the makeGuess(guess) function.
+  // makeGuess checks if the guess has been made before by seeing if it is already present in the array.
+  console.log(goodGuess);
   if (goodGuess) {
     makeGuess(guess);
   }
+  // clears the field so it is ready for the next guess.
   letterInput.value = "";
 });
-
+// The input parameter is holding the place of the guess variable.
 const inputValidator = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
   // checking for an input
@@ -51,9 +55,11 @@ const inputValidator = function (input) {
     return input;
   }
 };
-
+// After the guess is validated, this function makes the guess, and determines if the guess was already made or not.
 const makeGuess = function (guess) {
+  // converts all inputs or "guesses to uppercase"
   guess = guess.toUpperCase();
+  // if the guessedLetters array does not already contain the guess it is pushed to the array.
   if (!guessedLetters.includes(guess)) {
     guessedLetters.push(guess);
   } else {
