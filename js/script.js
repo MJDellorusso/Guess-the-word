@@ -62,8 +62,41 @@ const makeGuess = function (guess) {
   // if the guessedLetters array does not already contain the guess it is pushed to the array.
   if (!guessedLetters.includes(guess)) {
     guessedLetters.push(guess);
+    showGuessedLetters(guess);
+    updateWordInProgress(guessedLetters);
   } else {
     message.innerText = "You already guessed that letter!";
   }
   console.log(guessedLetters);
+};
+
+const showGuessedLetters = function () {
+  guessedLettersElement.innerHTML = "";
+  for (const letter of guessedLetters) {
+    const li = document.createElement("li");
+    li.innerText = letter;
+    guessedLettersElement.append(li);
+  }
+};
+
+const updateWordInProgress = function (guessedLetters) {
+  const wordUpper = word.toUpperCase();
+  const wordArray = wordUpper.split("");
+  const revealWord = [];
+  for (const letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+      revealWord.push(letter.toUpperCase());
+    } else {
+      revealWord.push("●");
+    }
+  }
+  wordInProgress.innerText = revealWord.join("");
+  checkWin();
+};
+
+const checkWin = function () {
+  if (word.toUpperCase() === wordInProgress.innerText) {
+    message.classList.add("win");
+    message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`;
+  }
 };
