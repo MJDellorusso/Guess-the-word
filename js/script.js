@@ -57,12 +57,15 @@ const inputValidator = function (input) {
 };
 // After the guess is validated, this function makes the guess, and determines if the guess was already made or not.
 const makeGuess = function (guess) {
-  // converts all inputs or "guesses to uppercase"
+  // converts all inputs or "guesses" to uppercase
   guess = guess.toUpperCase();
   // if the guessedLetters array does not already contain the guess it is pushed to the array.
   if (!guessedLetters.includes(guess)) {
     guessedLetters.push(guess);
+    // Iterates through the guessed letters and creates a li to display to the plyr their guesses.
     showGuessedLetters(guess);
+    // Iterates through the wordArray which is the answer word changed to an array which each letter is an element,
+    // checks the guessedLetters array for matching letters and pushes matching letters or placeholders to the revealWord array.
     updateWordInProgress(guessedLetters);
   } else {
     message.innerText = "You already guessed that letter!";
@@ -71,32 +74,47 @@ const makeGuess = function (guess) {
 };
 
 const showGuessedLetters = function () {
+  // Clears the ul of letters for each new game
   guessedLettersElement.innerHTML = "";
+  // iterates through each letter to make a list item
   for (const letter of guessedLetters) {
+    // creates the list item, asigns it text, and adds it to the list.
     const li = document.createElement("li");
     li.innerText = letter;
     guessedLettersElement.append(li);
   }
 };
-
+// Replaces "●" with correctly guessed letters.
 const updateWordInProgress = function (guessedLetters) {
+  // changing the value of the word variable to upper case.
   const wordUpper = word.toUpperCase();
+  // Takes the uppercase version of the word variable and seperates each letter as an individual value and places it into the wordArray.
   const wordArray = wordUpper.split("");
+  // Array to hold correctly guessed lettes and "●" symbols.
   const revealWord = [];
+  // iterates through each letter of the word array which holds the value of the word variable but as individual elements not as a string.
   for (const letter of wordArray) {
+    // If guessedLetters includes a letter from the word array, aka the array holding the answer.
     if (guessedLetters.includes(letter)) {
+      // Put the letter into the revealWord variable and make the letter uppercase.
       revealWord.push(letter.toUpperCase());
     } else {
+      // If guessedLetters does not include a letter in the wordArray push a placeholder for that letter.
       revealWord.push("●");
     }
   }
+  // Change the text of the word in progress <p> to the string version of the value of the revealWord array.
   wordInProgress.innerText = revealWord.join("");
+  // call the checkWin function.
   checkWin();
 };
 
 const checkWin = function () {
+  // If the word variable in all caps matches the value/text of the wordInProgress paragraph also in all caps
   if (word.toUpperCase() === wordInProgress.innerText) {
+    // add the "win" class to the message variable which has the value of the <p=".message">  class
     message.classList.add("win");
-    message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`;
+    // change the innerhtml of the message <p> to the <p> with the highlight class.
+    message.innerHTML = `<p class="highlight">You guessed the correct the word! Congrats!</p>`;
   }
 };
