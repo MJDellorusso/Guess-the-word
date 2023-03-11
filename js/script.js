@@ -93,6 +93,7 @@ const makeGuess = function (guess) {
     guessedLetters.push(guess);
     // Iterates through the guessed letters and creates a li to display to the plyr their guesses.
     showGuessedLetters();
+    // Incorrect guesses deduct from the total amount of guesses allowed to the player. Checks if the letter guessed is present in the word if it is not it deducts a guess and displays a message.
     guessCounter(guess);
     // Iterates through the wordArray which is the answer word changed to an array which each letter is an element,
     // checks the guessedLetters array for matching letters and pushes matching letters or placeholders to the revealWord array.
@@ -158,8 +159,8 @@ const guessCounter = function (guess) {
   // if remaining guesses has the value of 0
   if (remainingGuesses === 0) {
     // we change the message <p> text
-    message.innerText = `Sorry game over! The word you were looking for is ${word.toUpperCase()}`;
-    // we change the remaingguessesspan element text to reflect the number of guesses that remains
+    message.innerHTML = `Sorry game over! The word you were looking for <span class="highlight">${word.toUpperCase()}</span>.`;
+    // we change the remaingGuessesSpan element text to reflect the number of guesses that remains
     remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
   } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `1 guess`;
