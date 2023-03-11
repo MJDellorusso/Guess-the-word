@@ -6,24 +6,33 @@ const remainingGuessesElement = document.querySelector(".remaining");
 const remainingGuessesSpan = document.querySelector(".remaining span");
 const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
-
+// the word variables changed to let to allow it's value to change with each fetch of the api
 let word = "magnolia";
+// an empty array to hold the guessed letters to be compared to new guesses.
 const guessedLetters = [];
+// variable to hold the changing value of guesses available to the player
 let remainingGuesses = 8;
 
+// Defines a asynchronous function
 const getWord = async function () {
+  // fetching the data from the url await tells the code to wait for the response before continuing execution
   const wordRequest = await fetch(
     "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"
   );
+  // wordData varible is extracting the text from the response using the .text() method await is waiting for the text to be extracted before continuing execution
   const wordData = await wordRequest.text();
   console.log(wordData);
+  // Splits the list of words into an array using the .split() method with the newline character ("\n") as the delimiter
   const wordArray = wordData.split("\n");
   console.log(wordArray);
+  // generated a random index number based on the length of the wordArray
   const randomIndex = Math.floor(Math.random() * wordArray.length);
+  // changes the value of the let word varaible to the randomly generated word. the trim() method is used to eliminate white space. so there are no empty characters in the words.
   word = wordArray[randomIndex].trim();
+  // placeholder function is now called here to reflect the randomly generated word.
   placeholder(word);
 };
-
+// kicks off the game
 getWord();
 
 // Display the letters of the word as the placeholder symbol
@@ -130,17 +139,27 @@ const updateWordInProgress = function (guessedLetters) {
   checkWin();
 };
 
+// A function to check how many guesses a player has left
 const guessCounter = function (guess) {
+  // change the word variable to uppercase because the varibles guesses value is the input and it is changed to uppercase. JS is case sensitive so we want it to be able to match.
   const wordUpperCase = word.toUpperCase();
+  // iterating through each letter of the guess variable which will be the players input
+  // if the uppercase word includes the uppercase letter from the guess variable..
   for (const letter of guess)
     if (wordUpperCase.includes(letter)) {
+      // the message reflects the match
       message.innerText = "You guessed a correct letter";
+      // if the word does not include the guessed letter..
     } else if (!wordUpperCase.includes(letter)) {
+      // the message reflects the inccorect guess and we subtract 1 from the value of the remaining guesses variable
       message.innerText = "Sorry incorrect letter";
       remainingGuesses -= 1;
     }
+  // if remaining guesses has the value of 0
   if (remainingGuesses === 0) {
+    // we change the message <p> text
     message.innerText = `Sorry game over! The word you were looking for is ${word.toUpperCase()}`;
+    // we change the remaingguessesspan element text to reflect the number of guesses that remains
     remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
   } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `1 guess`;
