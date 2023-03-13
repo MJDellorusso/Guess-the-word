@@ -59,7 +59,6 @@ guessLetterButton.addEventListener("click", function (e) {
   const goodGuess = inputValidator(guess);
   // if the inputValidator determines the guess is good, run the makeGuess(guess) function.
 
-  console.log(goodGuess);
   if (goodGuess) {
     // makeGuess checks if the guess has been made before by seeing if it is already present in guessedLetters array.
     makeGuess(guess);
@@ -76,7 +75,7 @@ const inputValidator = function (input) {
     // Is the input longer than one letter
   } else if (input.length > 1) {
     message.innerText = "You must input a single letter.";
-    // di you type something other than a letter?
+    // did you type something other than a letter?
   } else if (!input.match(acceptedLetter)) {
     message.innerText = "You must input a letter.";
   } else {
@@ -159,9 +158,10 @@ const guessCounter = function (guess) {
   // if remaining guesses has the value of 0
   if (remainingGuesses === 0) {
     // we change the message <p> text
-    message.innerHTML = `Sorry game over! The word you were looking for <span class="highlight">${word.toUpperCase()}</span>.`;
+    message.innerHTML = `Sorry game over! The word you were looking for is <span class="highlight">${word.toUpperCase()}</span>.`;
     // we change the remaingGuessesSpan element text to reflect the number of guesses that remains
     remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+    startOver();
   } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `1 guess`;
   } else if (remainingGuesses > 1) {
@@ -176,5 +176,31 @@ const checkWin = function () {
     message.classList.add("win");
     // change the innerhtml of the message <p> to the <p> with the highlight class.
     message.innerHTML = `<p class="highlight">You guessed the correct the word! Congrats!</p>`;
+    startOver();
   }
 };
+
+const startOver = function () {
+  guessLetterButton.classList.add("hide");
+  remainingGuessesElement.classList.add("hide");
+  guessedLettersElement.classList.add("hide");
+  playAgainButton.classList.remove("hide");
+};
+
+playAgainButton.addEventListener("click", function () {
+  // reset all original values - grab a new word
+  message.classList.remove("win");
+  remainingGuesses = 8;
+  guessedLetters = [];
+  remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+  message.innerText = "";
+  guessedLettersElement.innerHTML = "";
+
+  // new word
+  getWord();
+  // show the right UI elements
+  guessLetterButton.classList.remove("hide");
+  playAgainButton.classList.add("hide");
+  remainingGuessesElement.classList.remove("hide");
+  guessedLettersElement.classList.remove("hide");
+});
